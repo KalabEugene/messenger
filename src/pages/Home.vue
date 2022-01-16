@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <Header/>
+  <div class="containerr">
+    <Header />
     <div class="image__box">
       <img
         class="background__profile"
@@ -13,45 +13,63 @@
           <h3>Popular posts</h3>
         </div>
         <div class="main__tape">
-          <div class="post" v-for="post in POSTS" :key="post._id">
-            <div class="block__user">
-              <v-avatar>
-                <img
-                  :src= post.srcImg
-                  alt="Photo"
-                />
-              </v-avatar>
-              <div class="name_user d-flex justify-space-between">
-                <h3>{{ post.userName }}</h3>
+          <div class="post__box" v-for="post in POSTS" :key="post._id">
+            <v-card class="mx-auto mb-4" color="#6e3cbc" dark max-width="900">
+              <v-card-title class="d-flex justify-space-between">
+                <div class="d-flex">
+                  <v-img
+                    max-height="30"
+                    max-width="30"
+                    src="../assets/Logo.png"
+                  ></v-img>
+                  <span class="ml-2 text-h6 font-weight-light">Pekker</span>
+                </div>
                 <v-btn
-                class="btn_close"
-                elevation="2"
-                icon
-                outlined
-                small
-                @click="getPostWithId(post._id)"
-                >X</v-btn>
-              </div>
-            </div>
-            <div class="message_user">
-              <p>{{ post.text }}</p>
-            </div>
-            <hr />
-            <div class="panel_post">
-              <v-btn icon color="pink">
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-              <v-btn icon color="blue">
-                <v-icon>mdi-message</v-icon>
-              </v-btn>
-              <v-btn icon color="yellow">
-                <v-icon>mdi-star</v-icon>
-              </v-btn>
-              <v-btn icon color="green">
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
-            </div>
-            <hr />
+                  class="btn_close"
+                  elevation="2"
+                  icon
+                  outlined
+                  small
+                  v-if="GET_USER.userId === post.userId"
+                  @click="getPostWithId(post._id)"
+                  >X</v-btn
+                >
+              </v-card-title>
+
+              <v-card-text class="text-h5 font-weight-bold">
+                {{ post.text }}
+              </v-card-text>
+              <LazyImg :fileName="post.fileName"></LazyImg>
+              <v-card-actions>
+                <v-list-item class="grow">
+                  <v-list-item-avatar color="grey darken-3">
+                    <v-img
+                      class="elevation-6"
+                      alt=""
+                      :src="post.srcImg"
+                    ></v-img>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <v-list-item-title>{{ post.userName }}</v-list-item-title>
+                  </v-list-item-content>
+
+                  <v-row align="center" justify="end">
+                    <v-btn
+                      icon
+                      color="pink"
+                      @click="like(post._id, post.likes)"
+                    >
+                      <v-icon class="mr-1"> mdi-heart </v-icon>
+                    </v-btn>
+                    <span class="subheading mr-2">{{ post.likes }}</span>
+                    <span class="mr-1">·</span>
+                    <v-icon class="mr-1"> mdi-share-variant </v-icon>
+                    <span class="subheading">45</span>
+                  </v-row>
+                </v-list-item>
+              </v-card-actions>
+            </v-card>
           </div>
         </div>
         <div class="box__friends">
@@ -62,34 +80,42 @@
   </div>
 </template>
 
+/* */
 <script>
 import Header from "../components/Header.vue";
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from "vuex";
+import LazyImg from "../components/LazyImg.vue";
 export default {
+  data() {
+    return {
+      counter: null,
+    };
+  },
   components: {
     Header,
+    LazyImg,
   },
   computed: {
-    ...mapGetters([
-      'POSTS'
-    ])
+    ...mapGetters(["POSTS", "GET_USER"]),
   },
   methods: {
     ...mapActions([
-      'GET_POSTS',
-      'DELETE_POST'
+      "GET_POSTS",
+      "DELETE_POST",
+      "UPDATE_POSTS_LIKES",
+      "DOWNLOAD_FILE",
     ]),
-    getPostWithId(id){
-      return this.DELETE_POST(id)
-      
-    }
+    getPostWithId(id) {
+      return this.DELETE_POST(id);
+    },
+    like(id, likes) {
+      this.counter = likes + 1;
+      return this.UPDATE_POSTS_LIKES({ id: id, likes: this.counter });
+    },
   },
-  mounted() {
-    this.GET_POSTS()
+  created() {
+    this.GET_POSTS();
   },
-  updated() {
-    this.GET_POSTS()
-  }
 };
 </script>
 
@@ -103,11 +129,15 @@ export default {
   max-height: 350px;
 }
 .main__container {
+  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   background-color: #d5f2f8;
   padding-top: 20px;
+}
+main {
+  height: 100%;
 }
 .popular__posts {
   width: 300px;
@@ -160,7 +190,7 @@ export default {
 .message_user {
   font-size: 24px;
 }
-.btn_close{
+.btn_close {
   color: black;
   font-size: 18px;
 }

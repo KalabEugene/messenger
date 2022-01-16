@@ -24,7 +24,6 @@ export default new VueRouter({
         {
             path: '/profile',
             component: MyProfile,
-            meta: { authRequired: true}
         },
         {
             path: '/myposts',

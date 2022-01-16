@@ -1,36 +1,40 @@
 <template>
   <div class="container__post">
     <Header />
-    <!-- <v-alert
-      shaped
-      type="success"
-      v-if="loading"
-      dismissible
-    >New post created</v-alert> -->
-    <v-snackbar
-      :timeout="3000"
-      :value="false"
-      left
-      color="green"
-      shaped
-    >
+    <v-snackbar :timeout="3000" :value="this.snackbar.value" left color="green" shaped>
       New post created
     </v-snackbar>
     <div class="new__post__box">
       <div class="list">
         <v-container justify="center" fluid>
           <v-form
-            ><v-textarea 
+            ><v-textarea
               color="purple"
               clearable
+              counter
               clear-icon="mdi-close-circle"
+              maxlength="250"
               label="Text"
               value="Enter a description..."
               v-model="post.text"
             ></v-textarea>
-            <v-btn color="success" type="submit" 
-            @click.prevent="addPost()"
-            >Publish</v-btn></v-form
+            <v-btn
+                color="orange"
+                class="ma-2 white--text"
+                @click="loader"
+              >
+                Upload
+                <v-icon
+                  right
+                  dark
+                >
+                  mdi-cloud-upload
+                </v-icon>
+              </v-btn>
+              <input type="file" style="display: none" ref="file" @change="handleFileUpload()" />
+            <v-btn :loading ="loading()" color="success" type="submit" @click.prevent="addPost()"
+              >Publish</v-btn
+            ></v-form
           >
         </v-container>
       </div>
@@ -40,38 +44,46 @@
 
 <script>
 import Header from "../components/Header.vue";
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 export default {
-    data() {
-      return {
+  data() {
+    return {
       post: {
-        text: '',
-        userName: this.getUser().displayName,
-        uid: this.getUser().uid,
-        img: this.getUser().photoURL
-        }
+        text: "",
+        file: "",
+      },
+      snackbar: {
+        value: false
       }
+    };
   },
   components: {
     Header,
   },
   methods: {
-    ...mapActions([
-      'SAVE_POST'
-    ])
-    ,
-    addPost(){
-      return this.$store.dispatch('SAVE_POST', this.post);
+    ...mapActions(["SAVE_POST"]),
+    addPost() {
+      let formData = new FormData();
+      formData.append("text", this.post.text);
+      formData.append("file", this.post.file);
+      this.$store.dispatch("SAVE_POST", formData);
+      this.snackbar.value = true;
+      this.post.text = "";
     },
-    getUser(){
-      return this.$store.getters.GET_USER
-    }
+    handleFileUpload() {
+      this.post.file = this.$refs.file.files[0];
+    },
+    loader(){
+      this.$refs.file.click()
+    },
+    loading() {
+      return this.GET_LOADING;
+    },
   },
   computed: {
-    ...mapGetters([
-        'GET_USER'
-        ]),
-      }
+    ...mapGetters(["GET_LOADING"]),
+  },
+  
 };
 </script>
 
