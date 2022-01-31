@@ -4,7 +4,7 @@
     <div class="container__landing">
       <div class="heading">
         <h1>PEKKER</h1>
-        <p>
+        <p class="text__landing">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur
           nostrum quisquam inventore eveniet. Repellendus exercitationem fugit
           pariatur obcaecati.
@@ -39,7 +39,8 @@ export default {
 .container {
   max-width: 100%;
   height: 100%;
-  background-image: url(../assets/images/thumb-1920-991761.jpg);
+  background: url(../assets/images/thumb-1920-991761.jpg) no-repeat center center fixed;
+  background-size: cover;
 }
 .container__landing {
   max-width: 100%;
@@ -53,10 +54,10 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 250px;
+  margin-top: 25%;
 }
 .heading p {
-  width: 900px;
+  max-width: 900px;
   text-align: center;
   color: white;
   font-family: "Dosis", sans-serif;

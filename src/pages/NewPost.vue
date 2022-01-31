@@ -10,12 +10,10 @@
           <v-form
             ><v-textarea
               color="purple"
-              clearable
               counter
-              clear-icon="mdi-close-circle"
               maxlength="250"
               label="Text"
-              value="Enter a description..."
+              value=""
               v-model="post.text"
             ></v-textarea>
             <v-btn
@@ -32,7 +30,7 @@
                 </v-icon>
               </v-btn>
               <input type="file" style="display: none" ref="file" @change="handleFileUpload()" />
-            <v-btn :loading ="loading()" color="success" type="submit" @click.prevent="addPost()"
+            <v-btn :loading ="loading()" :disabled="post.text.length === 0" color="success" type="submit" @click.prevent="addPost()"
               >Publish</v-btn
             ></v-form
           >
@@ -97,6 +95,7 @@ export default {
   justify-content: center;
   max-width: 100%;
   margin-top: 50px;
+  padding: 16px;
 }
 .list {
   width: 900px;

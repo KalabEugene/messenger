@@ -1,7 +1,7 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
-import axios from "axios";
+import api from "@/api/index.js"
 
 export default {
   state: {
@@ -19,11 +19,10 @@ export default {
       try {
         const auth = getAuth();
         await signInWithPopup(auth, new GoogleAuthProvider());
-        const idToken = await auth.currentUser.getIdToken(true)
-        const res = await axios.post(
-          "http://localhost:3000/users",
-          {token: idToken}
-        );
+        const idToken = await auth.currentUser.getIdToken(true);
+        const res = await api.post("/auth", {
+          token: idToken,
+        });
         let token = res.data.token;
         dispatch("SET_TOKEN", token);
         commit("SET_USER", res.data._doc);
@@ -36,40 +35,45 @@ export default {
     },
     SET_TOKEN(_, token) {
       localStorage.setItem("Token", token);
-      axios.defaults.headers.common["Authorization"] = token;
     },
     DELETE_TOKEN() {
-        localStorage.removeItem("Token");
-     },
+      localStorage.removeItem("Token");
+    },
     async GET_USER_DB({ commit }, user) {
       commit("SET_LOADING", true);
-      const userSearch = await axios.get(
-        "http://localhost:3000/users/me",
-        { headers: { Authorization: localStorage.getItem("Token") } },
-        user
-      );
-      commit("SET_USER", userSearch.data);
-      commit("SET_LOADING", false);
-    },
-    async LOGOUT_USER({ commit, dispatch}) {
       try {
-        await firebase.auth().signOut();
-        commit("SET_USER", null);
-        dispatch('DELETE_TOKEN');
+        const userSearch = await api.get(
+          "/users/me", user
+        );
+        commit("SET_USER", userSearch.data);
+        commit("SET_LOADING", false);
       } catch (error) {
         commit("SET_LOADING", false);
         commit("SET_ERROR", error.message);
       }
     },
-    async ADD_INFO({ commit, dispatch}, info) {
+    async LOGOUT_USER({ commit, dispatch }) {
+      commit("SET_LOADING", true);
+      try {
+        await firebase.auth().signOut();
+        commit("SET_USER", null);
+        dispatch("DELETE_TOKEN");
+        commit("SET_LOADING", false);
+      } catch (error) {
+        commit("SET_LOADING", false);
+        commit("SET_ERROR", error.message);
+      }
+    },
+    async ADD_INFO({ commit }, info) {
       commit("CLEAR_ERROR");
       commit("SET_LOADING", true);
-      await axios.put(
-        "http://localhost:3000/users/",
-        info
-      );
-      dispatch("UPDATE_POSTS", {nickName: info.nickName})
-      commit("SET_LOADING", false);
+      try {
+        await api.put("/users", info);
+        commit("SET_LOADING", false);
+      } catch (error) {
+        commit("SET_LOADING", false);
+        commit("SET_ERROR", error.message);
+      }
     },
   },
   getters: {

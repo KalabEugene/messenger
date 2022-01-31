@@ -1,12 +1,20 @@
-import axios from "axios";
+import api from "@/api/index.js"
 
 export default {
   state: {
     posts: [],
+    popularPosts: [],
+    countPosts: null,
   },
   mutations: {
     SET_POSTS: (state, posts) => {
       state.posts = posts;
+    },
+    SET_COUNT_POSTS: (state, count) => {
+      state.countPosts = count;
+    },
+    SET_POPULAR_POSTS: (state, posts) => {
+      state.popularPosts = posts;
     },
     ADD_POST: (state, post) => {
       state.posts.push(post);
@@ -16,70 +24,107 @@ export default {
     },
   },
   actions: {
-    async GET_POSTS({ commit }) {
+    async GET_POSTS({ commit }, payload) {
+      commit("SET_LOADING", true);
       try {
-        const posts = await axios.get("http://localhost:3000/posts", {
-          headers: { Authorization: localStorage.getItem("Token") },
+        const info = await api.get("/posts", {
+          params: {
+            page: payload,
+            limit: 5
+          }
         });
-        commit("SET_POSTS", posts.data);
+        commit("SET_POSTS", info.data.posts);
+        commit("SET_COUNT_POSTS", info.data.count);       
+        commit("SET_LOADING", false);
       } catch (error) {
         console.log(error);
       }
     },
-    async SAVE_POST({ commit }, post) {
-      commit("SET_LOADING", true)
+
+    async GET_MY_POSTS({ commit }, payload) {
+      commit("SET_LOADING", true);
       try {
-        await axios.post("http://localhost:3000/posts", post, {
+        const info = await api.get("/posts/my", {
+          params: {
+            page: payload,
+            limit: 5
+          }
+        });
+        commit("SET_POSTS", info.data.posts);
+        commit("SET_COUNT_POSTS", info.data.count);       
+        commit("SET_LOADING", false);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async SAVE_POST({ commit }, payload) {
+      commit("SET_LOADING", true);
+      try {
+        const post = await api.post("/posts", payload, {
           headers: {
-             "Content-Type": "multipart/form-data",
-           },
+            "Content-Type": "multipart/form-data",
+          },
         });
-        commit("ADD_POST", post);  
-        commit("SET_LOADING", false)
+        commit("ADD_POST", post);
+        commit("SET_LOADING", false);
       } catch (error) {
         console.log(error);
       }
     },
-    async UPDATE_POSTS({ dispatch }, payload) {
+    async UPDATE_POST_LIKES(_, payload) {
       try {
-        await axios.put("http://localhost:3000/posts/info", payload);
+        await api.put(
+          `/posts/${payload.post._id}/likes`,
+          payload
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async DELETE_POST({ commit, dispatch }, data) {
+      try {
+        await api.delete(`/posts/${data.postId}`);
+        if (data.fileId !== undefined) {
+          await api.delete(
+            `/gridfs/delete/${data.fileId}`
+          );
+        }
+        commit("REMOVE_POST", data.postId);
         dispatch("GET_POSTS");
       } catch (error) {
         console.log(error);
       }
     },
-    async UPDATE_POSTS_LIKES({ dispatch }, payload) {
+    async DOWNLOAD_FILE(_, fileId) {
       try {
-        await axios.put("http://localhost:3000/posts/likes", payload);
-        dispatch("GET_POSTS");
+        await api.get(`/gridfs/download/${fileId}`);
       } catch (error) {
         console.log(error);
       }
     },
-    async DELETE_POST({ commit, dispatch }, id) {
+    async GET_POPULAR_POSTS({ commit }) {
+      commit("SET_LOADING", true);
       try {
-        await axios.delete("http://localhost:3000/posts/" + id);
-        commit("REMOVE_POST", id);
-        dispatch("GET_POSTS");
+        let posts = await api.get(
+          "posts/popular",
+        );
+        commit("SET_POPULAR_POSTS", posts.data);
+        commit("SET_LOADING", false);
       } catch (error) {
         console.log(error);
       }
     },
-    async DOWNLOAD_FILE(_, fileName){
-      try {
-        await axios.get("http://localhost:3000/gridfs/download/" + fileName);
-              } catch (error) {
-        console.log(error);
-    }}
   },
   getters: {
     POSTS(state) {
       return state.posts;
     },
-    MY_POSTS(state, getters) {
-      return state.posts.filter((post) => {
-        return post.userId === getters.GET_USER.userId;
-      });
+    POPULAR_POSTS(state) {
+      return state.popularPosts;
     },
+    COUNT_POSTS(state){
+      return state.countPosts;
+    }
   },
 };

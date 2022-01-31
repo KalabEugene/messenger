@@ -1,19 +1,18 @@
 <template>
   <v-img
-    :src="downloadFile(fileName)"
-    max-height="450"
-    max-width="500"
+    :src="downloadFile(fileId)"
+    max-width="400"
     class="mx-auto"
   ></v-img>
 </template>
 <script>
 export default {
-  props: ["fileName"],
+  props: ["fileId"],
   methods: {
-    downloadFile(fileName) {
-      if (fileName !== undefined) {
-        this.$store.dispatch("DOWNLOAD_FILE", fileName);
-        let URL = "http://localhost:3000/gridfs/download/" + fileName;
+    downloadFile(fileId) {
+      if (fileId !== undefined) {
+        this.$store.dispatch("DOWNLOAD_FILE", fileId);
+        let URL = "http://localhost:3000/gridfs/download/" + fileId;
         return URL;
       }
     },

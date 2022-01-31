@@ -1,5 +1,102 @@
 <template>
-  <header>
+  <div>
+    <v-toolbar color="#6e3cbc">
+      <v-app-bar-nav-icon
+        class="hidden-md-and-up"
+        @click="drawer = !drawer"
+      ></v-app-bar-nav-icon>
+
+      <img class="logo" src="../assets/Logo.png" alt="" />
+      <v-toolbar-title class="ml-3"
+        ><router-link class="heading" to="/"
+          >Pekker</router-link
+        ></v-toolbar-title
+      >
+      <v-spacer></v-spacer>
+      <v-btn
+        class="btn__new__post ml-6"
+        color="warning"
+        dark
+        :to="'/newpost'"
+        v-if="isUserLoggedIn"
+        ><v-icon left> mdi-pencil </v-icon>
+        NEW POST
+      </v-btn>
+      <router-link class="nav__link" to="/" v-if="isUserLoggedIn"
+        ><v-btn class="btn__home ml-6" color="#b8e4f0" normal>
+          <v-icon color="#6e3cbc">mdi-home</v-icon>
+        </v-btn></router-link
+      >
+      <router-link class="nav__link" to="/login" v-if="!isUserLoggedIn"
+        ><v-btn color="#b8e4f0" normal>
+          <v-icon color="#6e3cbc">mdi-login</v-icon>
+        </v-btn></router-link
+      >
+      <div class="text-center ml-6" v-if="isUserLoggedIn">
+        <v-menu offset-y mt-n10>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon
+              ><v-avatar color="blue" size="43" v-bind="attrs" v-on="on">
+                <img :src="GET_USER.picture" alt="Photo" />
+              </v-avatar>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item v-for="(item, index) in items" :key="index">
+              <v-btn :to="item.link" @click="item.action"
+                ><v-icon class="mr-2">{{ item.icon }}</v-icon
+                >{{ item.title }}</v-btn
+              >
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
+    </v-toolbar>
+
+    <v-navigation-drawer
+      app
+      v-model="drawer"
+      class="accent-4"
+      color="#6e3cbc"
+      dark
+      temporary
+    >
+      <v-list>
+        <div class="ml-3 mb-3 mt-1 d-flex align-center">
+          <img class="logo" src="../assets/Logo.png" alt="" /><router-link
+            class="heading ml-3"
+            to="/"
+            >Pekker</router-link
+          >
+        </div>
+        <hr>
+        <v-list-item
+          v-for="item in itemsDrawer"
+          :key="item.title"
+          link
+          :to="item.link"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block @click="userIsLogOut">
+            <v-icon class="mr-2">mdi-logout</v-icon>
+            Logout
+          </v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
+  </div>
+  <!-- <header>
     <div class="header__container">
       <div class="heading__box">
         <img class="logo" src="../assets/Logo.png" alt="" /><router-link
@@ -12,23 +109,14 @@
         <ul class="nav__bar__list">
           <li>
             <div class="my-2">
-              <v-btn
-                color="warning"
-                dark
-                :to="'/newpost'"
-                v-if="isUserLoggedIn"
-              ><v-icon left>
-                mdi-pencil
-              </v-icon>
+              <v-btn color="warning" dark :to="'/newpost'" v-if="isUserLoggedIn"
+                ><v-icon left> mdi-pencil </v-icon>
                 NEW POST
               </v-btn>
             </div>
           </li>
           <router-link tag="li" class="nav__link" to="/" v-if="isUserLoggedIn"
-            ><v-btn
-              color="#b8e4f0"
-              normal
-            >
+            ><v-btn color="#b8e4f0" normal>
               <v-icon color="#6e3cbc">mdi-home</v-icon>
             </v-btn></router-link
           >
@@ -39,13 +127,6 @@
             v-if="!isUserLoggedIn"
             ><a>Login</a></router-link
           >
-          <!-- <router-link
-            tag="li"
-            class="nav__link"
-            to="/profile"
-            v-if="isUserLoggedIn"
-            ><a>My Profile</a></router-link
-          > -->
           <li v-if="isUserLoggedIn">
             <template>
               <div class="text-center">
@@ -58,15 +139,16 @@
                         v-bind="attrs"
                         v-on="on"
                       >
-                        <img :src="GET_USER.srcImg" alt="Photo" />
+                        <img :src="GET_USER.picture" alt="Photo" />
                       </v-avatar>
                     </v-btn>
                   </template>
                   <v-list>
                     <v-list-item v-for="(item, index) in items" :key="index">
-                      <v-btn :to="item.link" @click="item.action"><v-icon class="mr-2">{{item.icon}}</v-icon>{{
-                        item.title
-                      }}</v-btn>
+                      <v-btn :to="item.link" @click="item.action"
+                        ><v-icon class="mr-2">{{ item.icon }}</v-icon
+                        >{{ item.title }}</v-btn
+                      >
                     </v-list-item>
                   </v-list>
                 </v-menu>
@@ -76,7 +158,7 @@
         </ul>
       </div>
     </div>
-  </header>
+  </header> -->
 </template>
 
 <script>
@@ -84,23 +166,36 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      drawer: false,
       items: [
         {
           title: "My profile",
           link: "/profile",
           action: "null",
-          icon: "mdi-account"
+          icon: "mdi-account",
         },
         {
           title: "My posts",
           link: "/myposts",
           action: "null",
-          icon: "mdi-message"
+          icon: "mdi-message",
         },
         {
           title: "Logout",
           action: this.userIsLogOut,
-          icon: "mdi-logout"
+          icon: "mdi-logout",
+        },
+      ],
+      itemsDrawer: [
+        {
+          title: "Home",
+          link: "/",
+          icon: "mdi-home",
+        },
+        {
+          title: "New post",
+          link: "/newpost",
+          icon: "mdi-pencil",
         },
       ],
     };
@@ -121,21 +216,11 @@ export default {
 </script>
 
 <style scoped>
-.header__container {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #6e3cbc;
-  padding: 0 50px;
-}
 .heading {
   color: #b8e4f0;
   text-decoration: none;
   font-size: 24px;
   font-family: "Dosis", sans-serif;
-  margin-left: 5px;
 }
 .heading__box {
   display: flex;
@@ -145,27 +230,12 @@ export default {
   max-height: 30px;
   max-width: 30px;
 }
-.nav__bar__list {
-  display: flex;
-  justify-content: space-around;
-  list-style-type: none;
-  align-items: center;
-}
-.nav__link a {
-  text-decoration: none;
-  color: #b8e4f0;
-  border: 1px solid #b8e4f0;
-  padding: 10px 10px;
-  font-family: "Dosis", sans-serif;
-}
-.nav__link:hover {
-  color: white;
-}
-.nav__link a:active {
-  color: #6e3cbc;
-  background-color: #b8e4f0;
-}
-.nav__bar {
-  width: 600px;
+@media screen and (max-width: 960px) {
+  .btn__new__post {
+    display: none;
+  }
+  .btn__home {
+    display: none;
+  }
 }
 </style>

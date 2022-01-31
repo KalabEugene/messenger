@@ -2,40 +2,41 @@
   <div class="container__my__profile">
     <Header />
     <div v-if="!loading" class="box__my__profile">
-      <v-card class="mx-auto" max-width="1000" tile>
+      <v-card class="mx-auto" width="900" tile>
         <v-img
-          height="100%"
+          max-width="100%"
+          max-height="300px"
           src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg"
         >
           <v-row align="end" class="fill-height">
             <v-col align-self="start" class="pa-0" cols="12">
               <v-avatar class="profile" color="grey" size="200" tile>
-                <v-img :src="GET_USER.srcImg"></v-img>
+                <v-img :src="GET_USER.picture"></v-img>
               </v-avatar>
             </v-col>
             <v-col class="py-0">
               <v-list-item color="rgba(0, 0, 0, .4)" dark>
                 <v-list-item-content>
                   <v-list-item-title class="text-h6">
-                    {{ GET_USER.nickName }}
+                    {{ GET_USER.nickname }}
                   </v-list-item-title>
-                  <v-list-item-subtitle>Network Engineer</v-list-item-subtitle>
+                  <v-list-item-subtitle class="mb-3">Network Engineer</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-col>
           </v-row>
         </v-img>
       </v-card>
-      <v-card class="mx-auto pa-4" width="630" tile>
+      <v-card class="mx-auto pa-4" width="900" tile>
         <h3>About myself</h3>
-        <p v-if="!GET_USER.aboutUser">Tell about yourself...</p>
-        <p>{{ GET_USER.aboutUser }}</p>
+        <p v-if="!GET_USER.about">Tell about yourself...</p>
+        <p>{{ GET_USER.about }}</p>
         <v-textarea
           class="mt-12"
           background-color="grey lighten-2"
           color="cyan"
           label="Text"
-          v-model="userInfo.aboutUser"
+          v-model="userInfo.about"
         ></v-textarea>
         <v-btn
           color="success"
@@ -44,11 +45,11 @@
           >Add info</v-btn
         >
       </v-card>
-      <v-card class="mx-auto pa-4" width="630" tile>
+      <v-card class="mx-auto pa-4" width="900" tile>
         <h3>Here you can change your nickname</h3>
         <v-text-field
           label="Enter a new nickname..."
-          v-model="userInfo.nickName"
+          v-model="userInfo.nickname"
           hide-details="auto"
         ></v-text-field>
         <v-btn
@@ -60,13 +61,16 @@
         >
       </v-card>
     </div>
-    <div v-else>
-      <v-container><v-layout><v-progress-circular
-      :size="70"
-      :width="7"
-      color="purple"
-      indeterminate
-    ></v-progress-circular></v-layout></v-container>
+    <div v-else class="mx-auto">
+      <v-container
+        ><v-layout class="d-flex justify-center"
+          ><v-progress-circular
+            :size="70"
+            :width="7"
+            color="purple"
+            indeterminate
+          ></v-progress-circular></v-layout
+      ></v-container>
     </div>
   </div>
 </template>
@@ -78,8 +82,8 @@ export default {
   data() {
     return {
       userInfo: {
-        aboutUser: "",
-        nickName: "",
+        about: "",
+        nickname: "",
       },
     };
   },

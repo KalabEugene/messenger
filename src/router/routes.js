@@ -1,6 +1,5 @@
 import VueRouter from 'vue-router'
-/* import Store from '@/store/index'
- */import Home from '../pages/Home'
+import Home from '../pages/Home'
 import Login from '../pages/Login'
 import MyProfile from '../pages/MyProfile'
 import Landing from '../pages/Landing'
@@ -37,22 +36,3 @@ export default new VueRouter({
     ],
     mode: 'history'
 })
-
-/* router.beforeEach((to, from, next) => {
-    Store.dispatch('INIT_AUTH')
-    .then(user => {
-        if(to.matched.some(route => route.meta.authRequired)){
-        if(user){
-            next()
-        } else {
-            next('/login')
-        }
-    } else{
-        next()
-    }
-})
-    
-    
-})
-
-export default router */
