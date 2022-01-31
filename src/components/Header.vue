@@ -63,7 +63,7 @@
     >
       <v-list>
         <div class="ml-3 mb-3 mt-1 d-flex align-center">
-          <img class="logo" src="../assets/Logo.png" alt="" /><router-link
+          <img class="logo" src="../assets/logo.png" alt="" /><router-link
             class="heading ml-3"
             to="/"
             >Pekker</router-link

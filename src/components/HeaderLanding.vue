@@ -2,7 +2,7 @@
   <header>
     <div class="header__container">
       <div class="heading__box">
-        <img class="logo" src="../assets/Logo.png" alt="" /><router-link
+        <img class="logo" src="../assets/logo.png" alt="" /><router-link
           class="heading"
           to="/"
           >Pekker</router-link
@@ -81,13 +81,13 @@ export default {};
 .nav__bar {
   width: 400px;
 }
-@media screen and (max-width: 960px)
-{
-  .home, .account {
+@media screen and (max-width: 960px) {
+  .home,
+  .account {
     display: none;
   }
-  .nav__bar__list{
-      justify-content: right
+  .nav__bar__list {
+    justify-content: right;
   }
-}  
+}
 </style>
