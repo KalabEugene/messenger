@@ -6,7 +6,7 @@
         @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
 
-      <img class="logo" src="../assets/Logo.png" alt="" />
+      <img class="logo" src="../assets/logo.png" alt="" />
       <v-toolbar-title class="ml-3"
         ><router-link class="heading" to="/"
           >Pekker</router-link

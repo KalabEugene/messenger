@@ -9,7 +9,7 @@
               <v-img
                 max-height="30"
                 max-width="30"
-                src="../assets/Logo.png"
+                src="../assets/logo.png"
               ></v-img>
               <span class="ml-2 text-h6 font-weight-light">Pekker</span>
             </div>
