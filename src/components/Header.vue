@@ -69,7 +69,7 @@
             >Pekker</router-link
           >
         </div>
-        <hr>
+        <hr />
         <v-list-item
           v-for="item in itemsDrawer"
           :key="item.title"
@@ -96,69 +96,6 @@
       </template>
     </v-navigation-drawer>
   </div>
-  <!-- <header>
-    <div class="header__container">
-      <div class="heading__box">
-        <img class="logo" src="../assets/Logo.png" alt="" /><router-link
-          class="heading"
-          to="/"
-          >Pekker</router-link
-        >
-      </div>
-      <div class="nav__bar">
-        <ul class="nav__bar__list">
-          <li>
-            <div class="my-2">
-              <v-btn color="warning" dark :to="'/newpost'" v-if="isUserLoggedIn"
-                ><v-icon left> mdi-pencil </v-icon>
-                NEW POST
-              </v-btn>
-            </div>
-          </li>
-          <router-link tag="li" class="nav__link" to="/" v-if="isUserLoggedIn"
-            ><v-btn color="#b8e4f0" normal>
-              <v-icon color="#6e3cbc">mdi-home</v-icon>
-            </v-btn></router-link
-          >
-          <router-link
-            tag="li"
-            class="nav__link"
-            to="/login"
-            v-if="!isUserLoggedIn"
-            ><a>Login</a></router-link
-          >
-          <li v-if="isUserLoggedIn">
-            <template>
-              <div class="text-center">
-                <v-menu offset-y mt-n10>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon
-                      ><v-avatar
-                        color="blue"
-                        size="43"
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        <img :src="GET_USER.picture" alt="Photo" />
-                      </v-avatar>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item v-for="(item, index) in items" :key="index">
-                      <v-btn :to="item.link" @click="item.action"
-                        ><v-icon class="mr-2">{{ item.icon }}</v-icon
-                        >{{ item.title }}</v-btn
-                      >
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </div>
-            </template>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </header> -->
 </template>
 
 <script>
