@@ -1,5 +1,5 @@
 <template>
-  <v-img :src="downloadFile(fileId)" max-width="400" class="mx-auto"></v-img>
+  <v-img :src="downloadFile(fileId)" max-width="400" max-height="600" class="mx-auto"></v-img>
 </template>
 <script>
 export default {

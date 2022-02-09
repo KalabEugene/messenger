@@ -167,7 +167,8 @@ export default {
       "GET_POPULAR_POSTS",
     ]),
     getPostWithId(data) {
-      return this.DELETE_POST(data);
+      this.DELETE_POST(data);
+      return this.GET_POSTS();
     },
     like(post) {
       if (post.isLiked === true) {

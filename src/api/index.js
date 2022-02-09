@@ -24,8 +24,8 @@ http.interceptors.response.use(
   function (response) {
     if (response.status === 401) {
       localStorage.removeItem("Token");
-      router.push("/login");
-    }
+       router.push("/login");
+     }
     return response;
   },
   function (error) {

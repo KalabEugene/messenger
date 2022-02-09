@@ -40,7 +40,9 @@
               </v-list-item-avatar>
 
               <v-list-item-content>
-                <v-list-item-title>{{ post.author.nickname }}</v-list-item-title>
+                <v-list-item-title>{{
+                  post.author.nickname
+                }}</v-list-item-title>
               </v-list-item-content>
 
               <v-row align="center" justify="end">
@@ -65,27 +67,32 @@
           ></v-progress-circular></v-layout
       ></v-container>
     </div>
-    <Pagination v-if="this.COUNT_POSTS >= 5" :allFiles="this.COUNT_POSTS" :item="item" @page-chenged="getMyPosts" />
+    <Pagination
+      v-if="this.COUNT_POSTS >= 5"
+      :allFiles="this.COUNT_POSTS"
+      :item="item"
+      @page-chenged="getMyPosts"
+    />
   </div>
 </template>
 <script>
 import Header from "../components/Header.vue";
 import LazyImg from "../components/LazyImg.vue";
 import { mapGetters, mapActions } from "vuex";
-import Pagination from "../components/Pagination.vue"
+import Pagination from "../components/Pagination.vue";
 
 export default {
   data() {
     return {
       page: 1,
       allFiles: 0,
-      item: 5
+      item: 5,
     };
   },
   components: {
     Header,
     LazyImg,
-    Pagination
+    Pagination,
   },
   computed: {
     ...mapGetters(["POSTS", "GET_LOADING", "COUNT_POSTS"]),
@@ -94,19 +101,17 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["GET_POSTS", "DELETE_POST", "GET_USER_DB", "GET_MY_POSTS"]),
+    ...mapActions(["DELETE_POST", "GET_MY_POSTS"]),
     getPostWithId(data) {
-      return this.DELETE_POST(data);
+      this.DELETE_POST(data);
+      return this.GET_MY_POSTS();
     },
-    updatePosts() {
-      return this.GET_POSTS();
-    },
-    getMyPosts(page){
+    getMyPosts(page) {
       return this.GET_MY_POSTS(page);
+    },
   },
-  },
-  mounted() {
-    this.$store.dispatch("GET_USER_DB"), this.$store.dispatch("GET_MY_POSTS");
+  created() {
+    this.$store.dispatch("GET_MY_POSTS");
   },
 };
 </script>

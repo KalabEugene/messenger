@@ -11,7 +11,7 @@
       <div class="nav__bar">
         <ul class="nav__bar__list">
           <v-btn dark color="#6e3cbc" class="home"
-            ><router-link tag="li" class="nav__link" to="/"
+            ><router-link tag="li" class="nav__link" to="/login"
               ><v-icon left> mdi-pencil </v-icon>Home</router-link
             ></v-btn
           >

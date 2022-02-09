@@ -1,8 +1,15 @@
 <template>
   <div class="container__post">
     <Header />
-    <v-snackbar :timeout="3000" :value="this.snackbar.value" left color="green" shaped>
+    <v-snackbar
+      :timeout="3000"
+      :value="this.snackbar.value"
+      left
+      color="green"
+      shaped
+    >
       New post created
+      <a class="link__snackbar" href="/myposts">Click to see new post</a>
     </v-snackbar>
     <div class="new__post__box">
       <div class="list">
@@ -16,24 +23,30 @@
               value=""
               v-model="post.text"
             ></v-textarea>
+            <v-btn color="orange" class="ma-2 white--text" @click="loader">
+              Upload
+              <v-icon right dark> mdi-cloud-upload </v-icon>
+            </v-btn>
+            <input
+              type="file"
+              style="display: none"
+              ref="file"
+              @change="handleFileUpload()"
+            />
             <v-btn
-                color="orange"
-                class="ma-2 white--text"
-                @click="loader"
-              >
-                Upload
-                <v-icon
-                  right
-                  dark
-                >
-                  mdi-cloud-upload
-                </v-icon>
-              </v-btn>
-              <input type="file" style="display: none" ref="file" @change="handleFileUpload()" />
-            <v-btn :loading ="loading()" :disabled="post.text.length === 0" color="success" type="submit" @click.prevent="addPost()"
+              :loading="loading()"
+              :disabled="post.text.length === 0"
+              color="success"
+              type="submit"
+              @click.prevent="addPost()"
               >Publish</v-btn
-            ></v-form
-          >
+            >
+            <v-img
+              :src="post.image"
+              max-width="400px"
+              max-height="500px"
+            ></v-img>
+          </v-form>
         </v-container>
       </div>
     </div>
@@ -49,10 +62,11 @@ export default {
       post: {
         text: "",
         file: "",
+        image: "",
       },
       snackbar: {
-        value: false
-      }
+        value: false,
+      },
     };
   },
   components: {
@@ -60,19 +74,25 @@ export default {
   },
   methods: {
     ...mapActions(["SAVE_POST"]),
-    addPost() {
+    async addPost() {
       let formData = new FormData();
       formData.append("text", this.post.text);
       formData.append("file", this.post.file);
-      this.$store.dispatch("SAVE_POST", formData);
+      await this.$store.dispatch("SAVE_POST", formData);
       this.snackbar.value = true;
       this.post.text = "";
+      this.post.image = "";
     },
     handleFileUpload() {
       this.post.file = this.$refs.file.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.post.image = reader.result;
+      };
+      reader.readAsDataURL(this.post.file);
     },
-    loader(){
-      this.$refs.file.click()
+    loader() {
+      this.$refs.file.click();
     },
     loading() {
       return this.GET_LOADING;
@@ -81,7 +101,6 @@ export default {
   computed: {
     ...mapGetters(["GET_LOADING"]),
   },
-  
 };
 </script>
 
@@ -100,5 +119,9 @@ export default {
 .list {
   width: 900px;
   max-height: 100%;
+}
+.link__snackbar {
+  margin-left: 10px;
+  color: aqua;
 }
 </style>

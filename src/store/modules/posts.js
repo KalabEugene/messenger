@@ -1,4 +1,4 @@
-import api from "@/api/index.js"
+import api from "@/api/index.js";
 
 export default {
   state: {
@@ -30,11 +30,11 @@ export default {
         const info = await api.get("/posts", {
           params: {
             page: payload,
-            limit: 5
-          }
+            limit: 5,
+          },
         });
         commit("SET_POSTS", info.data.posts);
-        commit("SET_COUNT_POSTS", info.data.count);       
+        commit("SET_COUNT_POSTS", info.data.count);
         commit("SET_LOADING", false);
       } catch (error) {
         console.log(error);
@@ -47,11 +47,11 @@ export default {
         const info = await api.get("/posts/my", {
           params: {
             page: payload,
-            limit: 5
-          }
+            limit: 5,
+          },
         });
         commit("SET_POSTS", info.data.posts);
-        commit("SET_COUNT_POSTS", info.data.count);       
+        commit("SET_COUNT_POSTS", info.data.count);
         commit("SET_LOADING", false);
       } catch (error) {
         console.log(error);
@@ -74,24 +74,18 @@ export default {
     },
     async UPDATE_POST_LIKES(_, payload) {
       try {
-        await api.put(
-          `/posts/${payload.post._id}/likes`,
-          payload
-        );
+        await api.put(`/posts/${payload.post._id}/likes`, payload);
       } catch (error) {
         console.log(error);
       }
     },
-    async DELETE_POST({ commit, dispatch }, data) {
+    async DELETE_POST({ commit }, data) {
       try {
         await api.delete(`/posts/${data.postId}`);
         if (data.fileId !== undefined) {
-          await api.delete(
-            `/gridfs/delete/${data.fileId}`
-          );
+          await api.delete(`/gridfs/delete/${data.fileId}`);
         }
         commit("REMOVE_POST", data.postId);
-        dispatch("GET_POSTS");
       } catch (error) {
         console.log(error);
       }
@@ -106,9 +100,7 @@ export default {
     async GET_POPULAR_POSTS({ commit }) {
       commit("SET_LOADING", true);
       try {
-        let posts = await api.get(
-          "posts/popular",
-        );
+        let posts = await api.get("posts/popular");
         commit("SET_POPULAR_POSTS", posts.data);
         commit("SET_LOADING", false);
       } catch (error) {
@@ -123,8 +115,8 @@ export default {
     POPULAR_POSTS(state) {
       return state.popularPosts;
     },
-    COUNT_POSTS(state){
+    COUNT_POSTS(state) {
       return state.countPosts;
-    }
+    },
   },
 };

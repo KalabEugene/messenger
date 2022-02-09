@@ -24,8 +24,6 @@ new Vue({
     if (token) {
       this.$store.dispatch("SET_TOKEN", token);
       this.$store.dispatch("GET_USER_DB");
-    } else {
-      this.$router.push("/login")
-    }
+    } 
   },
 }).$mount("#app");
