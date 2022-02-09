@@ -39,7 +39,8 @@ export default {
 .container {
   max-width: 100%;
   height: 100%;
-  background: url(../assets/images/thumb-1920-991761.jpg) no-repeat center center fixed;
+  background: url(../assets/images/thumb-1920-991761.jpg) no-repeat center
+    center fixed;
   background-size: cover;
 }
 .container__landing {
@@ -54,7 +55,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 25%;
+  margin-top: 15%;
 }
 .heading p {
   max-width: 900px;

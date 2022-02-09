@@ -13,7 +13,7 @@ export default new VueRouter({
       component: Landing,
     },
     {
-      path: "",
+      path: "/",
       component: Home,
       beforeEnter: (to, from, next) => {
         const token = localStorage.getItem("Token");
