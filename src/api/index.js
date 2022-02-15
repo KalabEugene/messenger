@@ -2,7 +2,7 @@ import axios from "axios";
 import router from "../router/routes.js";
 
 const http = axios.create({
-  baseURL: process.env.VUE_APP_API_URL || "https://localhost:3000",
+  baseURL: process.env.VUE_APP_API_URL || "http://localhost:3000",
   withCredentials: false,
   crossDomain: true,
 });
@@ -24,8 +24,8 @@ http.interceptors.response.use(
   function (response) {
     if (response.status === 401) {
       localStorage.removeItem("Token");
-       router.push("/login");
-     }
+      router.push("/login");
+    }
     return response;
   },
   function (error) {

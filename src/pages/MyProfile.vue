@@ -9,10 +9,16 @@
           src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg"
         >
           <v-row align="end" class="fill-height">
-            <v-col align-self="start" class="pa-0" cols="12">
+            <v-col align-self="start" class="pa-0 d-flex" cols="12">
               <v-avatar class="profile" color="grey" size="200" tile>
                 <v-img :src="GET_USER.picture"></v-img>
               </v-avatar>
+              <v-col align="end" class="ma-4">
+                <v-btn color="error" dark @click.prevent="buyPremium()">
+                  <v-icon class="mr-2">mdi-cart</v-icon>
+                  Premium account
+                </v-btn>
+              </v-col>
             </v-col>
             <v-col class="py-0">
               <v-list-item color="rgba(0, 0, 0, .4)" dark>
@@ -20,7 +26,9 @@
                   <v-list-item-title class="text-h6">
                     {{ GET_USER.nickname }}
                   </v-list-item-title>
-                  <v-list-item-subtitle class="mb-3">Network Engineer</v-list-item-subtitle>
+                  <v-list-item-subtitle class="mb-3"
+                    >Network Engineer</v-list-item-subtitle
+                  >
                 </v-list-item-content>
               </v-list-item>
             </v-col>
@@ -91,15 +99,22 @@ export default {
     Header,
   },
   computed: {
-    ...mapGetters(["GET_USER", "GET_LOADING"]),
+    ...mapGetters(["GET_USER", "GET_LOADING", "GET_URL"]),
     loading() {
       return this.GET_LOADING;
     },
   },
   methods: {
-    ...mapActions(["ADD_INFO", "GET_USER_DB"]),
+    ...mapActions(["ADD_INFO", "GET_USER_DB", "GET_PREMIUM"]),
     addInfo(info) {
       this.ADD_INFO(info);
+    },
+    async buyPremium() {
+      const lastName = this.GET_USER.name.replace(/[^ ]+ /, "");
+      const firstName = this.GET_USER.name.replace(/ .*/, "");
+      await this.GET_PREMIUM({ firstName, lastName });
+      console.log(this.GET_URL);
+      window.location = this.GET_URL;
     },
   },
 };

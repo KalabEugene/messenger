@@ -30,7 +30,9 @@
                     :src="posts.author.picture"
                   ></v-img>
                 </v-avatar>
-                <div class="text font-weight-bold my-auto ml-3">"{{ posts.text }}"</div>
+                <div class="text font-weight-bold my-auto ml-3">
+                  "{{ posts.text }}"
+                </div>
               </v-card>
             </div>
           </div>
@@ -96,15 +98,13 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <v-list-item-title>{{ post.author.nickname }}</v-list-item-title>
+                    <v-list-item-title>{{
+                      post.author.nickname
+                    }}</v-list-item-title>
                   </v-list-item-content>
 
                   <v-row align="center" justify="end">
-                    <v-btn
-                      icon
-                      color="pink"
-                      @click="like(post)"
-                    >
+                    <v-btn icon color="pink" @click="like(post)">
                       <v-icon class="mr-1"> mdi-heart </v-icon>
                     </v-btn>
                     <span class="subheading mr-2">{{ post.likes }}</span>
@@ -124,7 +124,11 @@
                 ></v-progress-circular></v-layout
             ></v-container>
           </div>
-          <Pagination :allFiles="this.COUNT_POSTS" :item="item" @page-chenged="getPosts"/>
+          <Pagination
+            :allFiles="this.COUNT_POSTS"
+            :item="item"
+            @page-chenged="getPosts"
+          />
         </div>
         <div class="box__friends">
           <h3>Friends</h3>
@@ -137,14 +141,14 @@
 import Header from "../components/Header.vue";
 import { mapActions, mapGetters } from "vuex";
 import LazyImg from "../components/LazyImg.vue";
-import Pagination from "../components/Pagination.vue"
+import Pagination from "../components/Pagination.vue";
 export default {
   data() {
     return {
       counter: null,
       page: 1,
       allFiles: 0,
-      item: 5
+      item: 5,
     };
   },
   components: {
@@ -153,7 +157,13 @@ export default {
     Pagination,
   },
   computed: {
-    ...mapGetters(["POSTS", "GET_USER", "GET_LOADING", "POPULAR_POSTS", "COUNT_POSTS"]),
+    ...mapGetters([
+      "POSTS",
+      "GET_USER",
+      "GET_LOADING",
+      "POPULAR_POSTS",
+      "COUNT_POSTS",
+    ]),
     loading() {
       return this.GET_LOADING;
     },
@@ -173,16 +183,16 @@ export default {
     like(post) {
       if (post.isLiked === true) {
         this.counter = post.likes - 1;
-        post.likes = this.counter
-        this.UPDATE_POST_LIKES({post: post, likes: this.counter})
-        return post.isLiked = false
+        post.likes = this.counter;
+        this.UPDATE_POST_LIKES({ post: post, likes: this.counter });
+        return (post.isLiked = false);
       }
       this.counter = post.likes + 1;
-      post.likes = this.counter
-      this.UPDATE_POST_LIKES({post: post, likes: this.counter });
-      return post.isLiked = true
+      post.likes = this.counter;
+      this.UPDATE_POST_LIKES({ post: post, likes: this.counter });
+      return (post.isLiked = true);
     },
-    getPosts(page){
+    getPosts(page) {
       return this.GET_POSTS(page);
     },
   },
@@ -190,19 +200,18 @@ export default {
     this.GET_POSTS();
     this.GET_POPULAR_POSTS();
   },
-
 };
 </script>
 
 <style scoped>
-.picture__box{
+.picture__box {
   max-width: 90%;
 }
-.text{
+.text {
   max-width: 100%;
   font-size: 18px;
-  white-space: nowrap; 
-  overflow: hidden; 
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 .image__box {
@@ -267,25 +276,25 @@ main {
   color: black;
   font-size: 18px;
 }
-@media screen and ( max-width: 960px) {
-.popular__posts {
-  display: none;
+@media screen and (max-width: 960px) {
+  .popular__posts {
+    display: none;
+  }
+  .box__friends {
+    display: none;
+  }
 }
-.box__friends{
-  display: none;
+@media screen and (max-width: 600px) {
+  .v-image {
+    width: 300px;
+  }
 }
-}
-@media screen and ( max-width: 600px) {
-.v-image{
-  width: 300px;
-}
-}
-@media screen and ( max-width: 350px) {
-.v-image{
-  width: 250px;
-}
-.v-card{
-  width: 300px
-}
+@media screen and (max-width: 350px) {
+  .v-image {
+    width: 250px;
+  }
+  .v-card {
+    width: 300px;
+  }
 }
 </style>

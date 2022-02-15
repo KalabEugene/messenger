@@ -41,11 +41,7 @@
               @click.prevent="addPost()"
               >Publish</v-btn
             >
-            <v-img
-              :src="post.image"
-              max-width="400px"
-              max-height="500px"
-            ></v-img>
+            <v-img :src="post.image" class="image__upload"></v-img>
           </v-form>
         </v-container>
       </div>
@@ -123,5 +119,15 @@ export default {
 .link__snackbar {
   margin-left: 10px;
   color: aqua;
+}
+.image__upload {
+  max-width: 400px;
+  max-height: 500px;
+}
+@media screen and (max-width: 600px) {
+  .image__upload {
+    max-width: 300px;
+    max-height: 400px;
+  }
 }
 </style>
