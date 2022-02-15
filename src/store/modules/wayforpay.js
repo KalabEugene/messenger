@@ -22,7 +22,6 @@ export default {
             price: 1,
           },
         });
-        console.log(info.data);
         commit("SET_URL", info.data);
       } catch (error) {
         console.log(error);
