@@ -12,9 +12,8 @@ export default {
     },
   },
   actions: {
-    async GET_PREMIUM({ commit, state }, payload) {
+    async GET_PREMIUM({ commit }, payload) {
       try {
-        console.log(state.user);
         const info = await api.post("/wayforpay/buy", {
           params: {
             firstName: payload.firstName,
