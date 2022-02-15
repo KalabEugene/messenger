@@ -114,7 +114,7 @@ export default {
       const firstName = this.GET_USER.name.replace(/ .*/, "");
       await this.GET_PREMIUM({ firstName, lastName });
       console.log(this.GET_URL);
-      window.location = this.GET_URL;
+      /*window.location = this.GET_URL;*/
     },
   },
 };
