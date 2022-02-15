@@ -13,7 +13,7 @@ export default {
     downloadFile(fileId) {
       if (fileId !== undefined) {
         this.$store.dispatch("DOWNLOAD_FILE", fileId);
-        let URL = "http://api.pekker.me/gridfs/download/" + fileId;
+        let URL = "https://api.pekker.me/gridfs/download/" + fileId;
         return URL;
       }
     },
