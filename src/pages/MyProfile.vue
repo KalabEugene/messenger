@@ -113,7 +113,7 @@ export default {
       const lastName = this.GET_USER.name.replace(/[^ ]+ /, "");
       const firstName = this.GET_USER.name.replace(/ .*/, "");
       await this.GET_PREMIUM({ firstName, lastName });
-      /*window.location = this.GET_URL;*/
+      window.location = this.GET_URL;
     },
   },
 };
