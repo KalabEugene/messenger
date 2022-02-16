@@ -14,10 +14,19 @@
                 <v-img :src="GET_USER.picture"></v-img>
               </v-avatar>
               <v-col align="end" class="ma-4">
-                <v-btn color="error" dark @click.prevent="buyPremium()">
+                <v-btn
+                  v-if="GET_USER.isPremium === false"
+                  color="error"
+                  dark
+                  @click.prevent="buyPremium()"
+                >
                   <v-icon class="mr-2">mdi-cart</v-icon>
                   Premium account
                 </v-btn>
+                <v-btn v-if="GET_USER.isPremium === true" color="green" dark
+                  ><v-icon class="mr-2">mdi-checkbox-marked-circle</v-icon
+                  >Premium account activated</v-btn
+                >
               </v-col>
             </v-col>
             <v-col class="py-0">
