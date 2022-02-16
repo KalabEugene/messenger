@@ -23,7 +23,7 @@
                   <v-icon class="mr-2">mdi-cart</v-icon>
                   Premium account
                 </v-btn>
-                <v-btn v-if="GET_USER.isPremium === true" color="green" dark
+                <v-btn v-else color="green" dark
                   ><v-icon class="mr-2">mdi-checkbox-marked-circle</v-icon
                   >Premium account activated</v-btn
                 >
